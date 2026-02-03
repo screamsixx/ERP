@@ -89,17 +89,26 @@ export class PreciosComponent implements OnInit {
 
         if (this.precio.nombre?.trim() && this.precio.categoria_id) {
             if (this.precio.id) {
+                // TODO: Implementar la llamada al servicio de actualización
                 this.precios[this.findIndexById(this.precio.id)] = this.precio;
                 this.messageService.add({ severity: 'success', summary: 'Exitoso', detail: 'Precio Actualizado', life: 3000 });
+                this.precios = [...this.precios];
+                this.precioDialog = false;
+                this.precio = {};
             } else {
-                this.precio.id = this.createId();
-                this.precios.push(this.precio);
-                this.messageService.add({ severity: 'success', summary: 'Exitoso', detail: 'Precio Creado', life: 3000 });
+                this.preciosService.createPrecio(this.precio).subscribe({
+                    next: (newPrecio) => {
+                        this.precios.push(newPrecio);
+                        this.precios = [...this.precios];
+                        this.messageService.add({ severity: 'success', summary: 'Exitoso', detail: 'Precio Creado', life: 3000 });
+                        this.precioDialog = false;
+                        this.precio = {};
+                    },
+                    error: (err) => {
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo crear el precio: ' + (err.error.messages?.error || 'Error desconocido'), life: 3000 });
+                    }
+                });
             }
-
-            this.precios = [...this.precios];
-            this.precioDialog = false;
-            this.precio = {};
         }
     }
 
@@ -113,15 +122,6 @@ export class PreciosComponent implements OnInit {
         }
 
         return index;
-    }
-
-    createId(): string {
-        let id = '';
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return id;
     }
 
     onGlobalFilter(table: Table, event: Event) {

@@ -19,14 +19,21 @@ class Precios extends ResourceController
     {
         try {
             $precio = $this->request->getJSON();
+
+            if (!$precio) {
+                return $this->failValidationError('No se han enviado datos o el JSON es inválido');
+            }
+
             if ($this->model->insert($precio)) {
                 $precio->id = $this->model->insertID();
                 return $this->respondCreated($precio);
             } else {
-                return $this->failValidationError($this->model->validation->listErrors());
+                return $this->failValidationError($this->model->errors());
             }
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            return $this->failServerError('Error en la base de datos: ' . $e->getMessage());
         } catch (\Exception $e) {
-            return $this->failServerError('Ha ocurrido un error en el servidor');
+            return $this->failServerError('Ha ocurrido un error en el servidor: ' . $e->getMessage());
         }
     }
 
@@ -48,11 +55,12 @@ class Precios extends ResourceController
                 $precio->id = $id;
                 return $this->respondUpdated($precio);
             } else {
-                return $this->failValidationError($this->model->validation->listErrors());
+                return $this->failValidationError($this->model->errors());
             }
-
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            return $this->failServerError('Error en la base de datos: ' . $e->getMessage());
         } catch (\Exception $e) {
-            return $this->failServerError('Ha ocurrido un error en el servidor');
+            return $this->failServerError('Ha ocurrido un error en el servidor: ' . $e->getMessage());
         }
     }
 

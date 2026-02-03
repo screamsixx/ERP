@@ -22,4 +22,16 @@ export class PreciosService {
 
     return this.http.get<Precio[]>(this.baseUrl, { headers });
   }
+
+  createPrecio(precio: Precio): Observable<Precio> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `${token}`
+    });
+    const url = `${this.baseUrl}/create`;
+    // Excluimos el id ya que la base de datos lo genera automáticamente
+    const { id, ...data } = precio;
+    return this.http.post<Precio>(url, data, { headers });
+  }
+
 }

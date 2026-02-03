@@ -15,14 +15,16 @@ class PrecioModel extends Model
     protected $updatedField     = 'updated_at';
 
     protected $validationRules  = [
-        'categoria_id'   => 'required|integer|is_not_unique[categoria.id]',
+        'categoria_id'   => 'required|integer|is_valid_categoria',
         'nombre' => 'required|string|min_length[3]|max_length[255]',
         'precio_sin_iva' => 'permit_empty|decimal',
         'precio_con_iva' => 'permit_empty|decimal',
     ];
 
     protected $validationMessages = [
-        'categoria_id' => ['is_not_unique' => 'Debe proporcionar una categoría que ya exista.']
+        'categoria_id' => [
+            'is_valid_categoria' => 'La categoría proporcionada no existe o no es válida.'
+        ]
     ];
 
     protected $skipValidation = false;
