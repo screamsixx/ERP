@@ -1,0 +1,8 @@
+CRITICAL - 2026-02-02 21:01:30 --> Class 'Firebase\JWT\JWT' not found
+#0 C:\xampp\htdocs\bancorestful\app\Controllers\Auth.php(37): App\Controllers\Auth->generateJWT(Array)
+#1 C:\xampp\htdocs\bancorestful\system\CodeIgniter.php(918): App\Controllers\Auth->login()
+#2 C:\xampp\htdocs\bancorestful\system\CodeIgniter.php(404): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#3 C:\xampp\htdocs\bancorestful\system\CodeIgniter.php(312): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#4 C:\xampp\htdocs\bancorestful\public\index.php(45): CodeIgniter\CodeIgniter->run()
+#5 C:\xampp\htdocs\bancorestful\system\Commands\Server\rewrite.php(34): require_once('C:\\xampp\\htdocs...')
+#6 {main}
