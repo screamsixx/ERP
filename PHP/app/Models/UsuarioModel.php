@@ -10,9 +10,7 @@ class UsuarioModel extends Model
     protected $returnType       = 'array';
     protected $allowedFields    = ['nombre', 'username', 'password', 'rol_id'];
 
-    protected $useTimestamps    = true;
-    protected $createdField     = 'created_at';
-    protected $updatedField     = 'updated_at';
+    protected $useTimestamps    = false;
 
     protected $validationRules  = [
         'nombre'      => 'required|alpha_space|min_length[3]|max_length[65]',

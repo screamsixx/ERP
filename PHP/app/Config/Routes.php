@@ -47,7 +47,6 @@ $routes->group('api', ['namespace' => 'App\Controllers', 'filter' => 'authFilter
 	$routes->delete('roles/delete/(:num)', 'Roles::delete/$1');
 
 	$routes->get('usuarios', 'Usuarios::index');
-	$routes->get('usuarios/edit/(:num)', 'Usuarios::edit/$1');
 	$routes->put('usuarios/update/(:num)', 'Usuarios::update/$1');
 	$routes->delete('usuarios/delete/(:num)', 'Usuarios::delete/$1');
 	$routes->post('usuarios/create', 'Usuarios::create');

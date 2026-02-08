@@ -44,23 +44,6 @@ class Usuarios extends ResourceController
         }
     }
 
-    public function edit($id = null)
-    {
-        try {
-
-            if ($id == null)
-                return $this->failValidationError('No se ha pasado un Id valido');
-
-            $usuario = $this->model->find($id);
-            if ($usuario == null)
-                return $this->failNotFound('No se ha encontrado un usuario con el id: ' . $id);
-
-            return $this->respond($usuario);
-        } catch (\Exception $e) {
-            return $this->failServerError('Ha ocurrido un error en el servidor');
-        }
-    }
-
     public function update($id = null)
     {
         try {

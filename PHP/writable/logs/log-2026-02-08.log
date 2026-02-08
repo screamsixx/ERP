@@ -1,0 +1,28 @@
+CRITICAL - 2026-02-08 16:39:09 --> Call to undefined method App\Controllers\Categorias::failValidationErrors()
+#0 C:\xampp\htdocs\PHP\system\CodeIgniter.php(918): App\Controllers\Categorias->create()
+#1 C:\xampp\htdocs\PHP\system\CodeIgniter.php(404): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Categorias))
+#2 C:\xampp\htdocs\PHP\system\CodeIgniter.php(312): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#3 C:\xampp\htdocs\PHP\public\index.php(51): CodeIgniter\CodeIgniter->run()
+#4 C:\xampp\htdocs\PHP\system\Commands\Server\rewrite.php(34): require_once('C:\\xampp\\htdocs...')
+#5 {main}
+CRITICAL - 2026-02-08 16:39:21 --> Call to undefined method App\Controllers\Categorias::failValidationErrors()
+#0 C:\xampp\htdocs\PHP\system\CodeIgniter.php(918): App\Controllers\Categorias->create()
+#1 C:\xampp\htdocs\PHP\system\CodeIgniter.php(404): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Categorias))
+#2 C:\xampp\htdocs\PHP\system\CodeIgniter.php(312): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#3 C:\xampp\htdocs\PHP\public\index.php(51): CodeIgniter\CodeIgniter->run()
+#4 C:\xampp\htdocs\PHP\system\Commands\Server\rewrite.php(34): require_once('C:\\xampp\\htdocs...')
+#5 {main}
+CRITICAL - 2026-02-08 16:39:47 --> Call to undefined method App\Controllers\Categorias::failValidationErrors()
+#0 C:\xampp\htdocs\PHP\system\CodeIgniter.php(918): App\Controllers\Categorias->create()
+#1 C:\xampp\htdocs\PHP\system\CodeIgniter.php(404): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Categorias))
+#2 C:\xampp\htdocs\PHP\system\CodeIgniter.php(312): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#3 C:\xampp\htdocs\PHP\public\index.php(51): CodeIgniter\CodeIgniter->run()
+#4 C:\xampp\htdocs\PHP\system\Commands\Server\rewrite.php(34): require_once('C:\\xampp\\htdocs...')
+#5 {main}
+CRITICAL - 2026-02-08 16:49:18 --> Call to undefined method App\Controllers\Categorias::failValidationErrors()
+#0 C:\xampp\htdocs\PHP\system\CodeIgniter.php(918): App\Controllers\Categorias->create()
+#1 C:\xampp\htdocs\PHP\system\CodeIgniter.php(404): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Categorias))
+#2 C:\xampp\htdocs\PHP\system\CodeIgniter.php(312): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#3 C:\xampp\htdocs\PHP\public\index.php(51): CodeIgniter\CodeIgniter->run()
+#4 C:\xampp\htdocs\PHP\system\Commands\Server\rewrite.php(34): require_once('C:\\xampp\\htdocs...')
+#5 {main}
