@@ -1,53 +1,55 @@
 <div class="grid">
     <div class="col-12">
-        <div class="card px-6 py-6">
-            <p-toast></p-toast>
+        <div class="card px-2 sm:px-6 py-6"> <p-toast></p-toast>
 
-            <p-toolbar styleClass="mb-4 justify-content-end">
+            <p-toolbar styleClass="mb-4 flex flex-column sm:flex-row justify-content-center sm:justify-content-end gap-2">
                 <ng-template pTemplate="left">
-                    <div class="my-2">
-                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                        <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedCategorias()" [disabled]="!selectedCategorias || !selectedCategorias.length"></button>
+                    <div class="flex flex-wrap justify-content-center gap-2">
+                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success w-full sm:w-auto" (click)="openNew()"></button>
+                        <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger w-full sm:w-auto" (click)="deleteSelectedCategorias()" [disabled]="!selectedCategorias || !selectedCategorias.length"></button>
                     </div>
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="categorias" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['nombre']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [(selection)]="selectedCategorias" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="categorias" responsiveLayout="stack" [breakpoint]="'960px'" [rows]="10" [globalFilterFields]="['nombre']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}" [(selection)]="selectedCategorias" selectionMode="multiple" [rowHover]="true" dataKey="id">
+
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Gestión de Categorías</h5>
+                        <h5 class="m-0 text-center md:text-left">Gestión de Categorías</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar categoría..." class="w-full sm:w-auto"/>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." class="w-full"/>
                         </span>
                     </div>
                 </ng-template>
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem; text-align: center;">
+                        <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="id" style="text-align: center;">ID <p-sortIcon field="id"></p-sortIcon></th>
-                        <th pSortableColumn="nombre" style="text-align: center;">Nombre de Categoría <p-sortIcon field="nombre"></p-sortIcon></th>
-                        <th style="text-align: center;">Acciones</th>
+                        <th pSortableColumn="id" class="text-center">ID <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="nombre" class="text-center">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+                        <th class="text-center">Acciones</th>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="body" let-cat>
                     <tr>
-                        <td style="text-align: center;">
+                        <td>
+                            <span class="p-column-title font-bold">Seleccionar</span>
                             <p-tableCheckbox [value]="cat"></p-tableCheckbox>
                         </td>
-                        <td style="width:15%;" class="text-center">
-                            <span class="p-column-title">ID</span>
+                        <td class="text-center">
+                            <span class="p-column-title font-bold">ID</span>
                             {{cat.id}}
                         </td>
-                        <td style="width:65%;" class="text-center">
-                            <span class="p-column-title">Nombre</span>
+                        <td class="text-center">
+                            <span class="p-column-title font-bold">Nombre</span>
                             {{cat.nombre}}
                         </td>
                         <td>
+                            <span class="p-column-title font-bold">Acciones</span>
                             <div class="flex justify-content-center">
                                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCategoria(cat)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteCategoria(cat)"></button>
@@ -58,12 +60,12 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="categoriaDialog" [style]="{width: '450px'}" header="Detalles de Categoría" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="categoriaDialog" [style]="{width: '90vw', maxWidth: '450px'}" header="Detalles de Categoría" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="field">
                     <label for="nombre">Nombre</label>
                     <input type="text" pInputText id="nombre" [(ngModel)]="categoria.nombre" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !categoria.nombre}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !categoria.nombre">El nombre es obligatorio.</small>
+                    <small class="p-error" *ngIf="submitted && !categoria.nombre">El nombre es obligatorio.</small>
                 </div>
             </ng-template>
 
@@ -73,7 +75,7 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="deleteCategoriaDialog" header="Confirmar" [modal]="true" [style]="{width:'450px'}">
+        <p-dialog [(visible)]="deleteCategoriaDialog" header="Confirmar" [modal]="true" [style]="{width: '90vw', maxWidth: '450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
                 <span *ngIf="categoria">¿Deseas eliminar <b>{{categoria.nombre}}</b>?</span>
