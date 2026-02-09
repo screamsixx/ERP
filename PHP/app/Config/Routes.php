@@ -62,6 +62,20 @@ $routes->group('api', ['namespace' => 'App\Controllers', 'filter' => 'authFilter
 	$routes->post('precios/create', 'Precios::create');
 	$routes->put('precios/update/(:num)', 'Precios::update/$1');
 	$routes->delete('precios/delete/(:num)', 'Precios::delete/$1');
+
+	// Rutas para Puestos
+    $routes->get('puestos', 'Puestos::index');
+    $routes->post('puestos/create', 'Puestos::create');
+    $routes->get('puestos/show/(:num)', 'Puestos::show/$1'); // Opcional por si quieres ver uno solo
+    $routes->put('puestos/update/(:num)', 'Puestos::update/$1');
+    $routes->delete('puestos/delete/(:num)', 'Puestos::delete/$1');
+
+    // Rutas para Empleados
+    $routes->get('empleados', 'Empleados::index');
+    $routes->post('empleados/create', 'Empleados::create');
+    $routes->get('empleados/show/(:num)', 'Empleados::show/$1'); // Opcional
+    $routes->put('empleados/update/(:num)', 'Empleados::update/$1');
+    $routes->delete('empleados/delete/(:num)', 'Empleados::delete/$1');
 });
 
 

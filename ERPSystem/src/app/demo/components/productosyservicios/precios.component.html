@@ -2,63 +2,73 @@
     <div class="col-12">
         <div class="card px-6 py-6">
             <p-toast></p-toast>
-            <p-toolbar styleClass="mb-4">
-                <ng-template pTemplate="left">
-                    <div class="my-2">
-                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                        <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPrecios()" [disabled]="!selectedPrecios || !selectedPrecios.length"></button>
-                    </div>
-                </ng-template>
-            </p-toolbar>
 
+            <p-toolbar styleClass="mb-4 justify-content-end">
+    <ng-template pTemplate="left">
+        <div class="my-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPrecios()" [disabled]="!selectedPrecios || !selectedPrecios.length"></button>
+        </div>
+    </ng-template>
+</p-toolbar>
+
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
             <p-table #dt [value]="precios" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['nombre', 'precio_sin_iva', 'precio_con_iva']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [(selection)]="selectedPrecios" selectionMode="multiple" [rowHover]="true" dataKey="id">
-                <ng-template pTemplate="caption">
-                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Gestionar Precios</h5>
-                        <span class="block mt-2 md:mt-0 p-input-icon-left">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="nombre">Estudio <p-sortIcon field="nombre"></p-sortIcon></th>
-                        <th pSortableColumn="precio_sin_iva">Precio sin IVA <p-sortIcon field="precio_sin_iva"></p-sortIcon></th>
-                        <th pSortableColumn="precio_con_iva">Precio con IVA <p-sortIcon field="precio_con_iva"></p-sortIcon></th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-precio>
-                    <tr>
-                        <td>
-                            <p-tableCheckbox [value]="precio"></p-tableCheckbox>
-                        </td>
-                        <td style="width:30%; min-width:10rem;">
-                            <span class="p-column-title">Estudio</span>
-                            {{precio.nombre}}
-                        </td>
-                        <td style="width:20%; min-width:8rem;">
-                            <span class="p-column-title">Precio sin IVA</span>
-                            {{precio.precio_sin_iva | currency:'USD'}}
-                        </td>
-                        <td style="width:20%; min-width:8rem;">
-                            <span class="p-column-title">Precio con IVA</span>
-                            {{precio.precio_con_iva | currency:'USD'}}
-                        </td>
+    <ng-template pTemplate="caption">
+        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Gestionar Precios</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." class="w-full sm:w-auto"/>
+            </span>
+        </div>
+    </ng-template>
 
-                        <td>
-                            <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPrecio(precio)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletePrecio(precio)"></button>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem; text-align: center;">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="nombre" style="text-align: center;">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+            <th pSortableColumn="precio_sin_iva" style="text-align: center;">Precio sin IVA <p-sortIcon field="precio_sin_iva"></p-sortIcon></th>
+            <th pSortableColumn="precio_con_iva" style="text-align: center;">Precio con IVA <p-sortIcon field="precio_con_iva"></p-sortIcon></th>
+            <th style="text-align: center;">Acciones</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-precio>
+        <tr>
+            <td style="text-align: center;">
+                <p-tableCheckbox [value]="precio"></p-tableCheckbox>
+            </td>
+
+            <td style="width:30%; min-width:10rem;" class="text-center">
+                <span class="p-column-title">Nombre</span>
+                {{precio.nombre}}
+            </td>
+
+            <td style="width:20%; min-width:8rem;" class="text-center">
+                <span class="p-column-title">Precio sin IVA</span>
+                {{precio.precio_sin_iva | currency:'USD'}}
+            </td>
+
+            <td style="width:20%; min-width:8rem;" class="text-center">
+                <span class="p-column-title">Precio con IVA</span>
+                {{precio.precio_con_iva | currency:'USD'}}
+            </td>
+
+            <td style="min-width:10rem;">
+                <div class="flex justify-content-center">
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPrecio(precio)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletePrecio(precio)"></button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
         </div>
 
         <p-dialog [(visible)]="precioDialog" [style]="{width: '450px'}" header="Detalles del Precio" [modal]="true" class="p-fluid">
@@ -85,11 +95,68 @@
                         <p-inputNumber id="precio_con_iva" [(ngModel)]="precio.precio_con_iva" mode="currency" currency="USD" locale="en-US" [min]="0"></p-inputNumber>
                     </div>
                 </div>
-
             </ng-template>
 
             <ng-template pTemplate="footer">
-                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="savePrecio()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deletePrecioDialog" header="Confirmar" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="precio">¿Estás seguro de que quieres eliminar <b>{{precio.nombre}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletePrecioDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Sí" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deletePreciosDialog" header="Confirmar" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>¿Estás seguro de que quieres eliminar los precios seleccionados?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletePreciosDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Sí" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>
+
+        </div>
+
+        <p-dialog [(visible)]="precioDialog" [style]="{width: '450px'}" header="Detalles del Precio" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="field">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" pInputText id="nombre" [(ngModel)]="precio.nombre" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !precio.nombre}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !precio.nombre">El nombre es requerido.</small>
+                </div>
+
+                <div class="field">
+                    <label for="categoria">Categoría</label>
+                    <p-dropdown id="categoria" [options]="categorias" [(ngModel)]="precio.categoria_id" optionLabel="nombre" optionValue="id" placeholder="Seleccionar Categoría" [ngClass]="{'ng-invalid ng-dirty' : submitted && !precio.categoria_id}"></p-dropdown>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !precio.categoria_id">La categoría es requerida.</small>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="precio_sin_iva">Precio sin IVA</label>
+                        <p-inputNumber id="precio_sin_iva" [(ngModel)]="precio.precio_sin_iva" mode="currency" currency="USD" locale="en-US" [min]="0"></p-inputNumber>
+                    </div>
+                    <div class="field col">
+                        <label for="precio_con_iva">Precio con IVA</label>
+                        <p-inputNumber id="precio_con_iva" [(ngModel)]="precio.precio_con_iva" mode="currency" currency="USD" locale="en-US" [min]="0"></p-inputNumber>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
                 <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="savePrecio()"></button>
             </ng-template>
         </p-dialog>

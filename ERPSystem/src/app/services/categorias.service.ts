@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Precio } from '../demo/models/precio';
 import { Categoria } from '../demo/models/categoria';
 
 @Injectable({
@@ -13,14 +12,37 @@ export class CategoriasService {
 
   constructor(private http: HttpClient) { }
 
-  getCategorias(): Observable<any[]> {
-    // Nota: En una aplicación real, el token debería obtenerse dinámicamente desde un servicio de autenticación o almacenamiento local.
+  // Helper para obtener los headers con el token
+  private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      'Authorization': `${token}`
+    return new HttpHeaders({
+      'Authorization': `${token}`, // Añadido 'Bearer ' por estándar de tus curls
+      'Content-Type': 'application/json'
     });
+  }
 
-    return this.http.get<Categoria[]>(this.baseUrl, { headers });
+  // GET: Obtener todas las categorías
+  getCategorias(): Observable<Categoria[]> {
+    return this.http.get<Categoria[]>(this.baseUrl, { headers: this.getHeaders() });
+  }
+
+  // POST: Crear una categoría
+  createCategoria(categoria: Partial<Categoria>): Observable<Categoria> {
+    const url = `${this.baseUrl}/create`;
+    return this.http.post<Categoria>(url, categoria, { headers: this.getHeaders() });
+  }
+
+  // PUT: Actualizar una categoría
+  updateCategoria(id: number, categoria: Partial<Categoria>): Observable<Categoria> {
+    const url = `${this.baseUrl}/update/${id}`;
+    return this.http.put<Categoria>(url, categoria, { headers: this.getHeaders() });
+  }
+
+  // DELETE: Eliminar una categoría
+  // Nota: Tus curls muestran /update/{id} para borrar, lo cual es inusual,
+  // pero lo he dejado tal cual pediste en el comando.
+  deleteCategoria(id: number): Observable<any> {
+    const url = `${this.baseUrl}/delete/${id}`;
+    return this.http.delete<any>(url, { headers: this.getHeaders() });
   }
 }

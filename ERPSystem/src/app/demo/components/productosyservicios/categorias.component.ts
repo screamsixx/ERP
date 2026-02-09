@@ -1,103 +1,99 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { Product } from '../../api/product';
-import { ProductService } from '../../service/product.service';
-import { Subscription } from 'rxjs';
-import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { CategoriasService } from 'src/app/services/categorias.service';
+import { Categoria } from '../../models/categoria';
 
 @Component({
     templateUrl: './categorias.component.html',
+    providers: [MessageService]
 })
-export class CategoriasComponent implements OnInit, OnDestroy {
+export class CategoriasComponent implements OnInit {
 
-    items!: MenuItem[];
+    categorias: Categoria[] = [];
+    categoria: any = {};
+    selectedCategorias: Categoria[] = [];
 
-    products!: Product[];
+    categoriaDialog: boolean = false;
+    deleteCategoriaDialog: boolean = false;
+    submitted: boolean = false;
 
-    chartData: any;
+    constructor(
+        private categoriasService: CategoriasService,
+        private messageService: MessageService
+    ) { }
 
-    chartOptions: any;
+    ngOnInit() {
+        this.listAll(); // Método GET
+    }
 
-    subscription!: Subscription;
-
-    constructor(private productService: ProductService, public layoutService: LayoutService) {
-        this.subscription = this.layoutService.configUpdate$.subscribe(() => {
-            this.initChart();
+    // GET: Listar todo
+    listAll() {
+        this.categoriasService.getCategorias().subscribe({
+            next: (data) => this.categorias = data,
+            error: (e) => console.error(e)
         });
     }
 
-    ngOnInit() {
-        this.initChart();
-        this.productService.getProductsSmall().then(data => this.products = data);
-
-        this.items = [
-            { label: 'Agregar Nuevo', icon: 'pi pi-fw pi-plus' },
-            { label: 'Eliminar', icon: 'pi pi-fw pi-minus' }
-        ];
+    // ABRIR FORMULARIO NUEVO
+    openNew() {
+        this.categoria = {};
+        this.submitted = false;
+        this.categoriaDialog = true;
     }
 
-    initChart() {
-        const documentStyle = getComputedStyle(document.documentElement);
-        const textColor = documentStyle.getPropertyValue('--text-color');
-        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+    // ABRIR FORMULARIO EDICIÓN
+    editCategoria(categoria: Categoria) {
+        this.categoria = { ...categoria };
+        this.categoriaDialog = true;
+    }
 
-        this.chartData = {
-            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
-            datasets: [
-                {
-                    label: 'Primer Conjunto de Datos',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
-                    borderColor: documentStyle.getPropertyValue('--bluegray-700'),
-                    tension: .4
-                },
-                {
-                    label: 'Segundo Conjunto de Datos',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--green-600'),
-                    borderColor: documentStyle.getPropertyValue('--green-600'),
-                    tension: .4
-                }
-            ]
-        };
+    // POST / PUT: Guardar o Actualizar
+    saveCategoria() {
+        this.submitted = true;
 
-        this.chartOptions = {
-            plugins: {
-                legend: {
-                    labels: {
-                        color: textColor
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
-                    }
-                }
+        if (this.categoria.nombre?.trim()) {
+            if (this.categoria.id) {
+                // UPDATE (PUT)
+                this.categoriasService.updateCategoria(this.categoria.id, this.categoria).subscribe(() => {
+                    this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Categoría actualizada' });
+                    this.listAll();
+                    this.categoriaDialog = false;
+                    this.categoria = {};
+                });
+            } else {
+                // CREATE (POST)
+                this.categoriasService.createCategoria(this.categoria).subscribe(() => {
+                    this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Categoría creada' });
+                    this.listAll();
+                    this.categoriaDialog = false;
+                    this.categoria = {};
+                });
             }
-        };
+        }
     }
 
-    ngOnDestroy() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
+    // DELETE: Abrir confirmación
+    deleteCategoria(categoria: Categoria) {
+        this.categoria = { ...categoria };
+        this.deleteCategoriaDialog = true;
+    }
+
+    // DELETE: Confirmar borrado (DELETE)
+    confirmDelete() {
+        this.categoriasService.deleteCategoria(this.categoria.id).subscribe(() => {
+            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Categoría eliminada' });
+            this.listAll();
+            this.deleteCategoriaDialog = false;
+            this.categoria = {};
+        });
+    }
+
+    hideDialog() {
+        this.categoriaDialog = false;
+        this.submitted = false;
+    }
+
+    onGlobalFilter(table: any, event: Event) {
+        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 }

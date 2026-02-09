@@ -12,26 +12,43 @@ export class PreciosService {
 
   constructor(private http: HttpClient) { }
 
-  getPrecios(): Observable<any[]> {
-    // Nota: En una aplicación real, el token debería obtenerse dinámicamente desde un servicio de autenticación o almacenamiento local.
+  // Método privado para centralizar la configuración de headers
+  private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      'Authorization': `${token}`
+    return new HttpHeaders({
+      'Authorization': `${token}`, // Agregamos Bearer por estándar de tus CURLs
+      'Content-Type': 'application/json'
     });
+  }
 
-    return this.http.get<Precio[]>(this.baseUrl, { headers });
+  getPrecios(): Observable<Precio[]> {
+    return this.http.get<Precio[]>(this.baseUrl, { headers: this.getHeaders() });
   }
 
   createPrecio(precio: Precio): Observable<Precio> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `${token}`
-    });
     const url = `${this.baseUrl}/create`;
-    // Excluimos el id ya que la base de datos lo genera automáticamente
     const { id, ...data } = precio;
-    return this.http.post<Precio>(url, data, { headers });
+    return this.http.post<Precio>(url, data, { headers: this.getHeaders() });
   }
 
+  // --- NUEVOS MÉTODOS ---
+
+  /**
+   * Actualiza un precio existente
+   * @param id El ID del precio a modificar
+   * @param precio Los datos actualizados
+   */
+  updatePrecio(id: number, precio: Precio): Observable<Precio> {
+    const url = `${this.baseUrl}/update/${id}`;
+    return this.http.put<Precio>(url, precio, { headers: this.getHeaders() });
+  }
+
+  /**
+   * Elimina un precio por ID
+   * @param id El ID del precio a borrar
+   */
+  deletePrecio(id: number): Observable<any> {
+    const url = `${this.baseUrl}/delete/${id}`;
+    return this.http.delete(url, { headers: this.getHeaders() });
+  }
 }
